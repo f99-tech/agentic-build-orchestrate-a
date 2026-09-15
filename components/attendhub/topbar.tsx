@@ -51,11 +51,13 @@ export function Topbar() {
   ]
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/70 backdrop-blur-xl">
+      <div className="animate-gradient-x absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="inline-grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <Clock3 className="size-5" />
+        <Link href="/" className="group flex items-center gap-2.5">
+          <span className="relative inline-grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_18px_-2px_var(--primary)] transition-transform group-hover:scale-105">
+            <span className="absolute inset-0 rounded-xl bg-primary/40 animate-glow blur-md" />
+            <Clock3 className="relative size-5" />
           </span>
           <span className="hidden flex-col leading-tight sm:flex">
             <strong className="text-sm font-semibold tracking-tight">AttendHub</strong>

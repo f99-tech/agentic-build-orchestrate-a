@@ -10,9 +10,9 @@ export function RoleBanner() {
 
   return (
     <div
-      className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 pr-4 shadow-sm"
+      className="animate-fade-up flex items-center gap-3 rounded-2xl border border-border bg-card/70 p-3 pr-4 shadow-sm backdrop-blur-sm"
       style={{
-        backgroundImage: `linear-gradient(to right, color-mix(in oklch, ${user.color} 10%, var(--card)), var(--card) 55%)`,
+        backgroundImage: `linear-gradient(to right, color-mix(in oklch, ${user.color} 16%, transparent), transparent 55%)`,
       }}
     >
       <EmojiAvatar emoji={user.emoji} color={user.color} size="md" />

@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from "motion/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { accessLabel, formatDate, hoursBetween, visibleStaff, STAFF } from "@/lib/attendhub/data"
 import {
@@ -38,7 +39,12 @@ export function RecordsView() {
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-card shadow-sm">
+    <motion.section
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 26 }}
+      className="overflow-hidden rounded-2xl border border-border bg-card/80 shadow-sm backdrop-blur-sm"
+    >
       <div className="flex flex-col gap-4 border-b border-border p-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
@@ -88,11 +94,14 @@ export function RecordsView() {
                 </td>
               </tr>
             ) : (
-              rowsSource.map((r) => {
+              rowsSource.map((r, idx) => {
                 const person = STAFF.find((s) => s.id === r.staffId)!
                 return (
-                  <tr
+                  <motion.tr
                     key={r.id}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: Math.min(idx * 0.02, 0.4) }}
                     className="border-b border-border/60 transition-colors last:border-0 hover:bg-accent/40"
                   >
                     <td className="whitespace-nowrap px-5 py-3">{formatDate(r.date)}</td>
@@ -110,13 +119,13 @@ export function RecordsView() {
                     <td className="px-5 py-3">
                       <StatusBadge status={r.status} />
                     </td>
-                  </tr>
+                  </motion.tr>
                 )
               })
             )}
           </tbody>
         </table>
       </div>
-    </section>
+    </motion.section>
   )
 }
