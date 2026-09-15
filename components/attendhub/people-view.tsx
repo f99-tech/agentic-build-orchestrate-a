@@ -1,11 +1,21 @@
 "use client"
 
 import Link from "next/link"
+import { motion } from "motion/react"
 import { ArrowRight, Mail } from "lucide-react"
 import { accessLabel, roleTag, statusMeta, visibleStaff, STAFF } from "@/lib/attendhub/data"
 import { EmojiAvatar } from "./emoji-avatar"
 import { StatusBadge } from "./status-badge"
 import { useAttendHub } from "./provider"
+
+const container = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
+}
+const item = {
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 260, damping: 24 } },
+}
 
 export function PeopleView() {
   const { user, recordsFor, todayRecord } = useAttendHub()
@@ -27,17 +37,29 @@ export function PeopleView() {
         </p>
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      >
         {list.map((p) => {
           const recs = recordsFor(p.id).filter((r) => r.status !== "weekend")
           const present = recs.filter((r) => r.in).length
           const today = todayRecord(p.id)
           const meta = today ? statusMeta(today.status) : statusMeta("absent")
           return (
-            <article
+            <motion.article
               key={p.id}
-              className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
+              variants={item}
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card/80 p-5 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-lg"
             >
+              <span
+                className="pointer-events-none absolute -right-8 -top-8 size-24 rounded-full blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-60"
+                style={{ background: `color-mix(in oklch, ${p.color} 50%, transparent)` }}
+              />
               <div className="flex items-start gap-3">
                 <EmojiAvatar emoji={p.emoji} color={p.color} size="lg" />
                 <div className="min-w-0">
@@ -75,12 +97,12 @@ export function PeopleView() {
                 className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
               >
                 Open records
-                <ArrowRight className="size-4" />
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </Link>
-            </article>
+            </motion.article>
           )
         })}
-      </div>
+      </motion.div>
     </div>
   )
 }
